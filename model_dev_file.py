@@ -43,7 +43,7 @@ def preprocess_for_clas(data_):
     return (X,np.array(Y_))
     
 
-data = pd.read_csv('Wines.csv')
+data = pd.read_csv('./data/Wines.csv')
 for name in data.columns:
     data[name] = data[name].astype(float)
 
