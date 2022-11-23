@@ -1,6 +1,8 @@
 from keras import models
 from keras import layers
 from keras import metrics
+import numpy as np
+from vin import Vin
 
 
 def regression_model():
@@ -33,3 +35,11 @@ def load_model(modeltype: str):
         model = models.load_model('wine_reg_model.h5')
 
     return model
+
+def predict_quality(modeltype: str,data):
+    model = load_model(modeltype)
+
+    if modeltype == 'classification':
+        return np.argmax(model.predict(np.array([data])))+1
+    elif modeltype == 'regression':
+        return round(model.predict(np.array([data]))[0][0]*10)

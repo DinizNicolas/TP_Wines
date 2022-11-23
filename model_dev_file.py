@@ -49,8 +49,8 @@ for name in data.columns:
 
 data_ = data.values
 
-X,Y = preprocess_for_reg(data_)
-# X,Y = preprocess_for_clas(data_)
+# X,Y = preprocess_for_reg(data_)
+X,Y = preprocess_for_clas(data_)
 
 min_max_scaler = preprocessing.MinMaxScaler()
 X_scaled = min_max_scaler.fit_transform(X)
@@ -59,20 +59,20 @@ X_train, X_val_and_test, Y_train, Y_val_and_test = train_test_split(X_scaled, Y,
 X_val, X_test, Y_val, Y_test = train_test_split(X_val_and_test, Y_val_and_test, test_size=0.5)
 
 
-model = regression_model()
-# model = classification_model()
+# model = regression_model()
+model = classification_model()
 
 
 model.fit(X_train, Y_train,
           batch_size=128,
-          epochs=200,
+          epochs=100,
           verbose=1,
           validation_data=(X_val,Y_val))
 
 #model.save('wine_model.h5')
-for x in model.predict(X_test)[:2]:
-    print([round(k, ndigits=1) for k in x])
-print(Y_test[:2])
+print(np.argmax(model.predict(np.array([X_test[0]])))+1)
+# print(round(model.predict(np.array([X_test[0]]))[0][0]*10))
+print(Y_test[0])
 
 print(model.evaluate(X_test,Y_test))
 
