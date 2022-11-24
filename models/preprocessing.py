@@ -3,14 +3,28 @@ import pandas as pd
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 
-
+'''func preprocess_for_regression
+_inputs : 
+    data_ : matrix of size (unknown,13), containing floats
+_outputs :
+    X : matrix of size (unknown,11), the first 11 columns
+    Y : list of size (unknown), the columns before last, containing values between 0 and 1
+'''
 def preprocess_for_regression(data_):
     X = data_[:,0:11]
     Y = data_[:,-2]
     Y = Y/10
     return (X,Y)
 
-def preprocess_for_clas(data_):
+'''func preprocess_for_classification
+_inputs : 
+    data_ : matrix of size (unknown,13), containing floats
+_outputs :
+    X : matrix of size (unknown,11), the first 11 columns
+    Y : matrix of size (unknown,10), the columns before last transformed into a list representing its class
+            example : 6 becomes [0,0,0,0,0,1,0,0,0,0]
+'''
+def preprocess_for_classification(data_):
     X = data_[:,0:11]
     Y = data_[:,-2]
     Y_ = []
@@ -21,6 +35,12 @@ def preprocess_for_clas(data_):
 
     return (X,np.array(Y_))
 
+'''func load_csv
+_inputs : 
+    filename : string, the path of the file
+_outputs :
+    data : panda dataframe, containing the csv data
+'''
 def load_csv(filename: str):
     if '.csv' not in filename:
         filename += '.csv'
@@ -28,18 +48,38 @@ def load_csv(filename: str):
 
     return data
 
+'''func scale_data
+_inputs : 
+    data_ : matrix of size (unknown,11), containing floats
+_outputs :
+    data_scaled : the input data scaled using the formula (data - mean)/standart_deviation
+'''
 def scale_data(data):
     min_max_scaler = preprocessing.MinMaxScaler()
     data_scaled = min_max_scaler.fit_transform(data)
 
     return data_scaled
 
+'''func split_data
+_inputs : 
+    X : matrix of size (unknown,11), containing floats between -1 and 1
+    Y : list of elements (float or list)
+_outputs :
+    [X_train,Y_train,X_val,Y_val,X_test,Y_test] : input data split into training data, validation data and test data
+'''
 def split_data(X,Y):
     X_train, X_val_and_test, Y_train, Y_val_and_test = train_test_split(X, Y, test_size=0.1)
     X_val, X_test, Y_val, Y_test = train_test_split(X_val_and_test, Y_val_and_test, test_size=0.5)
 
     return [X_train,Y_train,X_val,Y_val,X_test,Y_test]
 
+'''func preprocessing
+_inputs : 
+    modeltype : string, name of the model to be used
+    data_filename : string, path to the csv file containing the data
+_outputs :
+    [X_train,Y_train,X_val,Y_val,X_test,Y_test] : data preprocessed for the model selected, split into training data, validation data and test data
+'''
 def preprocessing(modeltype: str,data_filename: str):
     data = load_csv(data_filename)
 
@@ -52,7 +92,7 @@ def preprocessing(modeltype: str,data_filename: str):
 
     X,Y = None,None
     if modeltype == 'classification':
-        X,Y = preprocess_for_clas(data)
+        X,Y = preprocess_for_classification(data)
     elif modeltype == 'regression':
         X,Y = preprocess_for_regression(data)
 
