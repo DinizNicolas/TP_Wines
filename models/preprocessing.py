@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import json
 from sklearn import preprocessing as pre
 from sklearn.model_selection import train_test_split
 
@@ -30,6 +31,26 @@ def load_csv(filename: str):
 
     return data
 
+
+'''func save_scaling_info
+_inputs : 
+    matrix of int, the data before being scaled
+_outputs :
+    // scaling infos saved into a json file 
+'''
+def save_scaling_info(data):
+    infos_save = []
+    for i in range(len(data[0])):
+        column = data[:,i]
+        mean = np.mean(column)
+        sd = np.std(column)
+        infos_save.append((mean,sd))
+
+    with open("../data/model_data.json", "w") as outfile:
+        json.dump(infos_save, outfile)
+
+    return 0
+
 '''func scale_data
 _inputs : 
     data_ : matrix of size (unknown,11), containing floats
@@ -37,8 +58,10 @@ _outputs :
     data_scaled : the input data scaled using the formula (data - mean)/standart_deviation
 '''
 def scale_data(data):
-    min_max_scaler = pre.MinMaxScaler()
+    min_max_scaler = pre.StandardScaler()
     data_scaled = min_max_scaler.fit_transform(data)
+
+    save_scaling_info(data)
 
     return data_scaled
 
