@@ -33,19 +33,36 @@ def load_model():
 def save_model(model):
     model.save(MODEL_NAME)
 
+def save_model_infos(model,X,Y,):
+    metrics_names = model.metrics_names
+    metrics_values = model.evaluate(X,Y)
+    model_config = model.get_config()
+
+    with open("../data/model_data.json", "r") as file:
+        jsonfile = json.load(file)
+
+    jsonfile["model_infos"]["metrics"] = (metrics_names,metrics_values)
+    jsonfile["model_infos"]["config"] = model_config
+
+    with open("../data/model_data.json", "w") as outfile:
+        json.dump(jsonfile, outfile)
+
 def train():
+    BATCH_SIZE = 128
+    EPOCHS = 100
     [X_train,Y_train,X_val,Y_val,X_test,Y_test] = preprocessing("Wines.csv")
 
     model = regression_model()
 
     model.fit(X_train, Y_train,
-            batch_size=128,
-            epochs=100,
+            batch_size=BATCH_SIZE,
+            epochs=EPOCHS,
             verbose=1,
             validation_data=(X_val,Y_val))
 
     model.evaluate(X_test,Y_test)
 
+    save_model_infos(model,X_test,Y_test)
     save_model(model)
 
 def predict_quality(data: list):
@@ -53,8 +70,9 @@ def predict_quality(data: list):
 
     #preprocss data correctly depending on model type
     with open("../data/model_data.json", "r") as file:
-        data_preprocess = json.load(file)
+        jsonfile = json.load(file)
 
+    data_preprocess = jsonfile["scaling_data"]
 
     for i in range(len(data)):
         (mean,sd) = data_preprocess[i]

@@ -46,8 +46,13 @@ def save_scaling_info(data):
         sd = np.std(column)
         infos_save.append((mean,sd))
 
+    with open("../data/model_data.json", "r") as file:
+        jsonfile = json.load(file)
+
+    jsonfile["scaling_data"] = infos_save
+
     with open("../data/model_data.json", "w") as outfile:
-        json.dump(infos_save, outfile)
+        json.dump(jsonfile, outfile)
 
     return 0
 
