@@ -1,8 +1,9 @@
 from vin import *
 from models import models
 import json
+from csv import writer
 
-def notation_de_vin(vin: Vin):    
+def note_wine(vin: Vin):    
     data = [vin.fixed_acidity,vin.volatile_acidity,vin.citric_acid,vin.residual_sugar,vin.chlorides,vin.free_sulfur_dioxide,vin.total_sulfur_dioxide,vin.density,vin.ph,vin.sulphates,vin.alcohol]
 
     prediction = models.predict_quality(data)
@@ -10,17 +11,17 @@ def notation_de_vin(vin: Vin):
     return {"Prediction": str(prediction)+"/10"}
 
 
-def donne_le_vin_parfait():
+def give_perfect_wine():
     #TODO stats to determine it
     return {"message": "le vin parfait"}
 
 
-def donne_modele():
+def give_model():
     #TODO download and return file model.h5
     return {"message": "mon meilleur modele"}
 
 
-def donne_description_model():
+def give_model_description():
     with open("../data/model_data.json", "r") as file:
         jsonfile = json.load(file)
 
@@ -29,11 +30,18 @@ def donne_description_model():
     return {"Model Informations": model_infos}
 
 
-def ajoute_le_vin_au_model():
-    #TODO add field to data
-    return {"message": "on a ajouté un vin"}
+def add_wine_to_dataset(vin: Vin):
+    data = [vin.fixed_acidity,vin.volatile_acidity,vin.citric_acid,vin.residual_sugar,vin.chlorides,vin.free_sulfur_dioxide,vin.total_sulfur_dioxide,vin.density,vin.ph,vin.sulphates,vin.alcohol,vin.quality,vin.id]
+    
+    with open("../data/Wines.csv",'a') as file:
+
+        writer_object = writer(file)
+        writer_object.writerow(data)
+        file.close()
+
+    return {"message": "Wine added"}
 
 
 def retrain_model():
     models.train()
-    return {"message": "C'est l'heure de l'entrainement"}
+    return {"message": "Model Retrained"}
