@@ -1,19 +1,28 @@
-### About this file
+## Installation 
 
-Ce dataframe contient les colonnes suivantes :
+1 - Installer les dépendances du projet
 
-Input variables (based on physicochemical tests):
-- fixed acidity | Acidité fixe : il s'agit de l'acidité naturelle du raisin comme l'acide malique ou l'acide tartrique.
-- volatile acidity | Acidité volatile : l'acidité volatile d'un vin est constituée par la partie des acides gras comme l'acide acétique appartenant à la série des acides qui se trouvent dans le vin soit à l'état libre, soit à l'état salifié. L'acidité volatile donne au vin du bouquet.
-- citric acid | Acide citrique : utilisé pour la prévention de la casse ferrique et participe au rééquilibrage de l'acidité des vins. 
-- residual sugar | Sucre résiduel : sucres (glucose + fructose) encore présents dans le vin après fermentation.
-- chlorides | Chlorures : matière minérale contenue naturellement dans le vin (sel, magnésium...)
-- free sulfur dioxide | Sulfites libres : exhacerbent les propriétés antioxydantes du vin
-- total sulfur dioxide | Sulfites libres + Sulfites liées à la réaction avec d'autres molécules du vin
-- density | Densité du vin (g/l)
-- pH | PH du vin
- - sulphates | Sulfates : sels composés d'anions SO4(2-) != sulfites
- - alcohol | degré d'alcool
+    pip install -r requirements.txt
 
-Output variable (based on sensory data):
-- quality | Qualité générale : note comprise en 0 et 10
+2 - Lancer l'application
+
+    uvicorn run:app
+
+
+## Choix du projet
+
+Preprocessing :
+Etant donné que les valeurs des différentes colonnes ont des ordres de grandeur différents, on normalise les données.
+On sépare ensuite le dataset en train jeux de données : train, test et validation.
+
+Utilisation de Keras :
+- pour la simplicité de tester différentes architectures de modèles
+- pour la sauvegarde et chargement de modèle simple
+
+Le fichier data/model_data.json :
+- ["scaling_data"] Etant donné que l'on normalise les données pour entrainer le modèle, il faut aussi normaliser les donnée que l'on donne au modèle pour prédire la note d'un vin. Pour cela il faut sauvegarder la moyenne et l'écart type pour chaque colonne.
+- ["model_infos"] De plus, pour éviter de charger le modèle et l'évaluer, les données d'évaluation et de configuration sont stockées dans ce fichier
+
+Vin parfait :
+Pour prédire le vin parfait, on calcule le coefficient de corrélation entre chaque colonne et la colonne qualité.
+Etant donné que l'on cherche la qualité la plus haute, si le coefficient est négatif nous prenons le minimum de cette colonne, sinon le maximum.
