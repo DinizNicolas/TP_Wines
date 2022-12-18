@@ -1,5 +1,6 @@
 from vin import *
 from models import models
+from starlette.responses import FileResponse
 import json
 import pandas as pd
 from csv import writer
@@ -30,8 +31,7 @@ def give_perfect_wine():
 
 
 def give_model():
-    #TODO download and return file model.h5
-    return {"message": "mon meilleur modele"}
+    return FileResponse("./models/model.h5", media_type='application/octet-stream', filename="model.h5")
 
 
 def give_model_description():
