@@ -1,4 +1,3 @@
-from enum import Enum
 from fastapi import FastAPI
 from fonction import *
 
@@ -11,31 +10,31 @@ async def root():
 
 
 @app.post("/api/predict")
-async def note_ce_vin(vin: Vin):
-    return notation_de_vin(vin)
+async def wine_notation(vin: Vin):
+    return note_wine(vin)
 
 
 @app.get("/api/predict")
-async def donne_vin_parfait():
-    return donne_le_vin_parfait();
+async def give_the_perfect_wine():
+    return give_perfect_wine();
 
 
 @app.get("/api/model")
-async def donne_le_modele():
-    return donne_modele()
+async def give_the_model():
+    return give_model()
 
 
 @app.get("/api/model/description")
-async def donne_la_description_du_model():
-    return donne_description_model();
+async def give_description_of_model():
+    return give_model_description();
 
 @app.put("/api/model")
-async def ajoute_un_vin(vin: Vin):
-    return ajoute_le_vin_au_model(vin);
+async def add_wine(vin: Vin):
+    return add_wine_to_dataset(vin);
 
 
 @app.post("/api/model/retrain")
-async def entraine_le_model():
+async def train_model():
     return retrain_model();
 
 

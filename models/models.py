@@ -23,7 +23,6 @@ def regression_model():
 
     return model
 
-
 def load_model():
     model = None
     model = models.load_model(MODEL_NAME)
@@ -40,12 +39,14 @@ def save_model_infos(model,X,Y,):
 
     with open("../data/model_data.json", "r") as file:
         jsonfile = json.load(file)
+        file.close()
 
     jsonfile["model_infos"]["metrics"] = (metrics_names,metrics_values)
     jsonfile["model_infos"]["config"] = model_config
 
     with open("../data/model_data.json", "w") as outfile:
         json.dump(jsonfile, outfile)
+        outfile.close()
 
 def train():
     BATCH_SIZE = 128
@@ -71,6 +72,7 @@ def predict_quality(data: list):
     #preprocss data correctly depending on model type
     with open("../data/model_data.json", "r") as file:
         jsonfile = json.load(file)
+        file.close()
 
     data_preprocess = jsonfile["scaling_data"]
 
