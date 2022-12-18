@@ -1,6 +1,6 @@
-from tensorflow.keras import models
-from tensorflow.keras import layers
-from tensorflow.keras import metrics
+from keras import models
+from keras import layers
+from keras import metrics
 import numpy as np
 import sys
 import json
@@ -29,7 +29,7 @@ def load_model():
     return model
 
 def save_model(model):
-    model.save(MODEL_NAME)
+    model.save('models/'+MODEL_NAME)
 
 def save_model_infos(model,X,Y,):
     metrics_names = model.metrics_names
