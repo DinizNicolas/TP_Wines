@@ -1,6 +1,7 @@
 from vin import *
 from models import models
 import json
+import pandas as pd
 from csv import writer
 
 def note_wine(vin: Vin):    
@@ -12,8 +13,20 @@ def note_wine(vin: Vin):
 
 
 def give_perfect_wine():
-    #TODO stats to determine it
-    return {"message": "le vin parfait"}
+    columns = ["fixed acidity","volatile acidity","citric acid","residual sugar","chlorides","free sulfur dioxide","total sulfur dioxide","density","pH","sulphates","alcohol"]
+    dataset = pd.read_csv("data/Wines.csv")
+
+    response = {}
+
+    for col in columns:
+        correlation_coef = dataset[col].corr(dataset["quality"])
+
+        if correlation_coef < 0:
+            response[col] = min(dataset[col])
+        else:
+            response[col] = max(dataset[col])
+
+    return {"Vin parfait": response}
 
 
 def give_model():
