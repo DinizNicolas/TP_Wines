@@ -46,12 +46,12 @@ def save_scaling_info(data):
         sd = np.std(column)
         infos_save.append((mean,sd))
 
-    with open("../data/model_data.json", "r") as file:
+    with open("data/model_data.json", "r") as file:
         jsonfile = json.load(file)
 
     jsonfile["scaling_data"] = infos_save
 
-    with open("../data/model_data.json", "w") as outfile:
+    with open("data/model_data.json", "w") as outfile:
         json.dump(jsonfile, outfile)
 
     return 0
@@ -90,7 +90,7 @@ _outputs :
     [X_train,Y_train,X_val,Y_val,X_test,Y_test] : data preprocessed for the model selected, split into training data, validation data and test data
 '''
 def preprocessing(data_filename: str):
-    data = load_csv('../data/'+data_filename)
+    data = load_csv('data/'+data_filename)
 
     #Change values type to float
     for name in data.columns:

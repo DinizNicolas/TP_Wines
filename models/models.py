@@ -2,13 +2,12 @@ from tensorflow.keras import models
 from tensorflow.keras import layers
 from tensorflow.keras import metrics
 import numpy as np
-from vin import Vin
 import sys
 import json
-from preprocessing import preprocessing
+from .preprocessing import preprocessing
 
 #Adding project root to path
-sys.path.append("../")
+sys.path.append("./")
 
 MODEL_NAME = "model.h5"
 
@@ -25,7 +24,7 @@ def regression_model():
 
 def load_model():
     model = None
-    model = models.load_model(MODEL_NAME)
+    model = models.load_model("models/"+MODEL_NAME)
 
     return model
 
@@ -37,14 +36,14 @@ def save_model_infos(model,X,Y,):
     metrics_values = model.evaluate(X,Y)
     model_config = model.get_config()
 
-    with open("../data/model_data.json", "r") as file:
+    with open("data/model_data.json", "r") as file:
         jsonfile = json.load(file)
         file.close()
 
     jsonfile["model_infos"]["metrics"] = (metrics_names,metrics_values)
     jsonfile["model_infos"]["config"] = model_config
 
-    with open("../data/model_data.json", "w") as outfile:
+    with open("data/model_data.json", "w") as outfile:
         json.dump(jsonfile, outfile)
         outfile.close()
 
@@ -70,7 +69,7 @@ def predict_quality(data: list):
     model = load_model()
 
     #preprocss data correctly depending on model type
-    with open("../data/model_data.json", "r") as file:
+    with open("data/model_data.json", "r") as file:
         jsonfile = json.load(file)
         file.close()
 
