@@ -31,9 +31,7 @@ def give_perfect_wine():
 
 
 def give_model():
-    #TODO download and return file model.h5
-    return FileResponse("./models", media_type='application/octet-stream', filename="model.h5")
-    # return {"message": "mon meilleur modele"}
+    return FileResponse("./models/model.h5", media_type='application/octet-stream', filename="model.h5")
 
 
 def give_model_description():
