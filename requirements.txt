@@ -1,0 +1,6 @@
+tensorflow==2.7.0
+numpy==1.20.2
+pandas==1.2.4
+sklearn==0.0
+fastapi==0.85.0
+pydantic==1.10.2
