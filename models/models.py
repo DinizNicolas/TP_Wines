@@ -68,7 +68,6 @@ def train():
 def predict_quality(data: list):
     model = load_model()
 
-    #preprocss data correctly depending on model type
     with open("data/model_data.json", "r") as file:
         jsonfile = json.load(file)
         file.close()
